@@ -1,6 +1,6 @@
 # Итератор для удаления дубликатов
-from types import *
 class Unique(object):
+
     def __init__(self, items, **kwargs):
         # Нужно реализовать конструктор
         # В качестве ключевого аргумента, конструктор должен принимать bool-параметр ignore_case,
@@ -8,34 +8,22 @@ class Unique(object):
         # Например: ignore_case = True, Aбв и АБВ разные строки
         #           ignore_case = False, Aбв и АБВ одинаковые строки, одна из них удалится
         # По-умолчанию ignore_case = False
-        if type(items)==GeneratorType:
-            items=list(items)
-        self.lst = items
-        self.size = len(items)-1
-        self.index = 0
-        self.prev=list()
-        self.ignore_case = False
-        for k,v in kwargs.items():
-            if k=='ignore_case' and v==True:
-                self.ignore_case=True
-
+        self.IGNORE_CASE = kwargs['ignore_case'] if 'ignore_case' in kwargs.keys() else False
+        self.ITEMS = list(items)
+        self.PASSED = set()
 
     def __next__(self):
         # Нужно реализовать __next__
-        while (True):
-            if self.index > self.size:
+        while True:
+            if self.INDEX == len(self.ITEMS) - 1:
                 raise StopIteration
-            if self.ignore_case:
-                if not str(self.lst[self.index]).upper() in self.prev:
-                    self.prev.append(str(self.lst[self.index]).upper())
-                    return self.lst[self.index]
-            else:
-                if not self.lst[self.index] in self.prev:
-                    self.prev.append(self.lst[self.index])
-                    return self.lst[self.index]
-            self.index += 1
-
-
+            self.INDEX += 1
+            val = str(self.ITEMS[self.INDEX])
+            val2 = val if self.IGNORE_CASE else val.lower()
+            if val2 not in self.PASSED:
+                self.PASSED.add(val2)
+                return val
 
     def __iter__(self):
+        self.INDEX = -1
         return self

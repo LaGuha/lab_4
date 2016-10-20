@@ -28,18 +28,18 @@ def f1(arg):
 
 @print_result
 def f2(arg):
-    return [x for x in arg if "ПРОГРАММИСТ" in x.upper()]
+    return [x for x in arg if x.upper().startswith("ПРОГРАММИСТ")]
 
 
 @print_result
 def f3(arg):
-    return [x + " с опытом Python" for x in arg]
+    return ["{} с опытом Python". format(x) for x in arg]
 
 
 @print_result
 def f4(arg):
     rand = gen_random(100000, 200000, len(arg))
-    return [x + ", зарплата " + str(next(rand)) + " руб" for x in arg]
+    return ["{}, зарплата {} руб.".format(x[0],x[1]) for x in zip(arg,rand)]
 
 with timer():
     f4(f3(f2(f1(data))))
